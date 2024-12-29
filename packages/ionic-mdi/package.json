@@ -1,0 +1,28 @@
+{
+  "name": "@robsonos/ionic-mdi",
+  "version": "0.0.1",
+  "description": "Material design icons for Ionic",
+  "author": {
+    "name": "Robson Oliveira",
+    "email": "robsonos@outlook.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robsonos/npm-packages",
+    "directory": "packages/mdi-icons"
+  },
+  "bugs": {
+    "url": "https://github.com/robsonos/npm-packages"
+  },
+  "license": "MIT",
+  "module": "index.mjs",
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "fs-extra": "^11.2.0",
+    "p-limit": "3.1.0"
+  }
+}

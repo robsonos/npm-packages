@@ -1,0 +1,27 @@
+{
+  "name": "ionic-mdi",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/ionic-mdi/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "ts-node packages/ionic-mdi/src/index.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/packages/ionic-mdi"],
+      "options": {
+        "jestConfig": "packages/ionic-mdi/jest.config.ts"
+      }
+    }
+  }
+}
