@@ -1,0 +1,9 @@
+{
+  "projectName": "npm-packages",
+  "projectOwner": "ronsonos",
+  "commit": true,
+  "linkToUsage": true,
+  "skipCi": true,
+  "repoType": "github",
+  "commitConvention": "angular"
+}
