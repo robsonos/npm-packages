@@ -93,7 +93,6 @@ const createPackageJson = async (distDir: string, packageJsonPath: string) => {
 
 const clearDistDirectory = async (distDir: string) => {
   await fs.rm(distDir, { recursive: true, force: true });
-  await fs.mkdir(path.join(distDir, 'src'), { recursive: true });
 };
 
 const copyReadme = async (readmeFilePath: string, distDir: string) => {
@@ -122,9 +121,9 @@ const build = async () => {
     'packages',
     'ionic-mdi'
   );
-  const esmIconsPath = path.join(distDirectory, 'src', 'index.mjs');
-  const cjsIconsPath = path.join(distDirectory, 'src', 'index.js');
-  const dtsIconsPath = path.join(distDirectory, 'src', 'index.d.ts');
+  const esmIconsPath = path.join(distDirectory, 'index.mjs');
+  const cjsIconsPath = path.join(distDirectory, 'index.js');
+  const dtsIconsPath = path.join(distDirectory, 'index.d.ts');
 
   try {
     await clearDistDirectory(distDirectory);
