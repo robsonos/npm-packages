@@ -1,5 +1,3 @@
-# ionic-mdi
-
 <p align="center">
   <img 
       alt="Maintenance status"
@@ -42,10 +40,6 @@
   </a>
 </p>
 
-<!-- TODO: mention: -->
-<!-- https://fonts.google.com/icons?icon.set=Material+Icons
-https://github.com/marella/material-design-icons -->
-
 ## Usage
 
 - Import the icons to the component
@@ -73,12 +67,16 @@ import {
 - Then use them on the template:
 
 ```html
-<ion-icon name="icon-settings-round"> </ion-icon>
-<ion-icon ios="icon-warning-outlined" md="icon-warning-sharp"> </ion-icon>
-<ion-icon name="battery0"> </ion-icon>
+<ion-icon name="icon-settings-round"></ion-icon>
+<ion-icon ios="icon-warning-outlined" md="icon-warning-sharp"></ion-icon>
+<ion-icon name="battery0"></ion-icon>
 ```
 
-https://ionicframework.com/docs/angular/build-options#ngmodule-based-applications
+For more details check out Ionic's [build options](https://ionicframework.com/docs/angular/build-options)
+
+## Licenses
+
+This project uses Material Design icon by Google, licensed under the Apache License 2.0. See the [LICENSE](LICENSE) for details.
 
 ## Contributors
 
