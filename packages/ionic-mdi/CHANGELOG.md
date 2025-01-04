@@ -1,3 +1,13 @@
+## 0.1.2 (2025-01-04)
+
+### 🩹 Fixes
+
+- **ionic-mdi:** add license files ([42cb8a5](https://github.com/robsonos/npm-packages/commit/42cb8a5))
+
+### ❤️ Thank You
+
+- Robson Oliveira dos Santos @robsonos
+
 ## 0.1.1 (2024-12-30)
 
 ### 🩹 Fixes
