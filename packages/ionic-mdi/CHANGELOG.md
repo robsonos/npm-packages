@@ -1,3 +1,13 @@
+## 0.1.3 (2025-01-04)
+
+### 🩹 Fixes
+
+- **ionic-mdi:** update license info on packages.json ([6bf0146](https://github.com/robsonos/npm-packages/commit/6bf0146))
+
+### ❤️ Thank You
+
+- Robson Oliveira dos Santos @robsonos
+
 ## 0.1.2 (2025-01-04)
 
 ### 🩹 Fixes
