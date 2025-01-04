@@ -14,7 +14,7 @@
   "bugs": {
     "url": "https://github.com/robsonos/npm-packages"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "module": "index.mjs",
   "main": "index.js",
   "typings": "index.d.ts",
