@@ -95,14 +95,11 @@ const clearDistDirectory = async (distDir: string) => {
   await fs.rm(distDir, { recursive: true, force: true });
 };
 
-const copyReadme = async (readmeFilePath: string, distDir: string) => {
-  await fs.copy(readmeFilePath, path.join(distDir, 'README.md'));
-};
-
 const build = async () => {
   const rootDirectory = __dirname;
   const packageJsonFilePath = join(rootDirectory, '..', 'package.json');
   const readmeFilePath = join(rootDirectory, '..', 'README.md');
+  const licenseFilePath = join(rootDirectory, '..', 'LICENSE');
   const srcIconsDirectory = path.join(
     rootDirectory,
     '..',
@@ -128,7 +125,8 @@ const build = async () => {
   try {
     await clearDistDirectory(distDirectory);
 
-    await copyReadme(readmeFilePath, distDirectory);
+    await fs.copy(readmeFilePath, path.join(distDirectory, 'README.md'));
+    await fs.copy(licenseFilePath, path.join(distDirectory, 'LICENSE'));
 
     await createPackageJson(distDirectory, packageJsonFilePath);
 
