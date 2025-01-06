@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Skip hook on CI environments
+[ -n "$CI" ] && exit 0
+
+# Exit on error
+set -e
+
+# Get the current branch
+current_branch=$(git symbolic-ref --short HEAD || echo "")
+
+# Validate current_branch
+if [[ -z "$current_branch" ]]; then
+  echo "Error: Could not determine the current branch."
+  exit 1
+fi
+
+# Only check for prerelease branches
+if [[ "$current_branch" =~ ^(alpha|beta|next)$ ]]; then
+  # Fetch the latest main branch
+  git show-ref --verify --quiet refs/heads/main || git fetch origin main:main
+  git fetch --depth=1 origin main
+
+  # Check if current branch is behind main
+  behind_count=$(git rev-list --count $current_branch..origin/main)
+
+  if [ "$behind_count" -gt 0 ]; then
+    echo "Warning: Your branch '$current_branch' is $behind_count commits behind 'main'."
+    echo "It's recommended to sync with 'main' before pushing."
+    echo "To sync, run:"
+    echo "  git merge main"
+    echo "  # Resolve conflicts if any, then commit and push."
+    read -p "Do you want to continue pushing anyway? (y/N): " response
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+      echo "Push aborted. Please sync with 'main' before pushing."
+      exit 1
+    fi
+  else
+    echo "Your branch '$current_branch' is up-to-date with 'main'. Proceeding with push."
+  fi
+fi
