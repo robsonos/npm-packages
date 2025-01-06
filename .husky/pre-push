@@ -17,9 +17,11 @@ fi
 
 # Only check for prerelease branches
 if [[ "$current_branch" =~ ^(alpha|beta|next)$ ]]; then
-  # Fetch the latest main branch and tags
-  git show-ref --verify --quiet refs/heads/main || git fetch origin main:main
-  git fetch origin main
+  # Fetch the latest main reference if not already available
+  if ! git show-ref --verify --quiet refs/remotes/origin/main; then
+    echo "Fetching latest main..."
+    git fetch origin main
+  fi
 
   # Check if current branch is behind main
   behind_count=$(git rev-list --count $current_branch..origin/main)
