@@ -1,6 +1,21 @@
 {
   "name": "@robsonos/ionic-mdi",
   "version": "0.1.3",
+  "keywords": [
+    "ionic",
+    "icons",
+    "material",
+    "material design",
+    "material design icons",
+    "google",
+    "svg",
+    "mobile",
+    "web component",
+    "component",
+    "custom element",
+    "ios",
+    "android"
+  ],
   "description": "Material design icons for Ionic",
   "author": {
     "name": "Robson Oliveira",
