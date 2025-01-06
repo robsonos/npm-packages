@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch to release from (e.g., package-name@1.x or package-name@1.0.x)'
+        type: string
+        description: 'Maintenance branch to release from (e.g., package-name@1.x or package-name@1.0.x)'
         required: true
 
 env:

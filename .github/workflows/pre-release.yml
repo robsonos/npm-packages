@@ -1,11 +1,16 @@
 name: Release pre-release
 
 on:
-  push:
-    branches:
-      - alpha
-      - beta
-      - next
+  workflow_dispatch:
+    inputs:
+      branch:
+        type: choice
+        description: 'Pre-release branch to release from'
+        required: true
+        options:
+          - alpha
+          - beta
+          - next
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
