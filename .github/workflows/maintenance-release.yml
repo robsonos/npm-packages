@@ -1,11 +1,11 @@
-name: Release pre-release
+name: Release maintenance
 
 on:
-  push:
-    branches:
-      - alpha
-      - beta
-      - next
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to release from (e.g., package-name@1.x or package-name@1.0.x)'
+        required: true
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
@@ -32,16 +32,18 @@ jobs:
       - name: Set up git bot user
         uses: snow-actions/git-config-user@v1.0.0
 
-      - name: Determine release channel
-        id: get-channel
+      - name: Validate branch input
         run: |
-          branch=$(echo ${GITHUB_REF#refs/heads/})
-          echo "channel=$branch" >> $GITHUB_OUTPUT
+          branch=${{ github.event.inputs.branch }}
+          if [[ ! "$branch" =~ ^[a-zA-Z0-9-_]+@[0-9]+\.[0-9]*\.?x$ ]]; then
+            echo "Invalid branch format: $branch"
+            exit 1
+          fi
 
-      - name: Create pre-release
+      - name: Create maintenance release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release version prerelease --preid=${{ steps.get-channel.outputs.channel }} --git-tag
+        run: npx nx release --skip-publish
 
       - name: Check if a new tag was created
         id: check-tag
@@ -56,4 +58,4 @@ jobs:
         if: steps.check-tag.outputs.created == 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-        run: npx nx release publish --tag ${{ steps.get-channel.outputs.channel }}
+        run: npx nx release publish --tag ${{ github.event.inputs.branch }}
