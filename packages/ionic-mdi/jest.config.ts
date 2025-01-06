@@ -1,5 +1,5 @@
 export default {
-  displayName: 'ionic-mdi',
+  displayName: '@robsonos/ionic-mdi',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {
