@@ -46,17 +46,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx nx release --skip-publish
 
-      - name: Check if a new tag was created
-        id: check-tag
-        run: |
-          if git tag --points-at HEAD | grep -q .; then
-            echo "created=true" >> $GITHUB_OUTPUT
-          else
-            echo "created=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Publish
-        if: steps.check-tag.outputs.created == 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
         run: npx nx release publish --tag ${{ github.event.inputs.branch }}
