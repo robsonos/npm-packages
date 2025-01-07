@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Skip hook on CI environments
 [ -n "$CI" ] && exit 0
 

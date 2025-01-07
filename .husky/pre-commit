@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# Skip hook on CI environments
+[ -n "$CI" ] && exit 0
+
+# Exit on error
+set -e
+
+# Get the current branch
+current_branch=$(git symbolic-ref --short HEAD || echo "")
+
+# Validate current_branch
+if [[ -z "$current_branch" ]]; then
+  echo "Error: Could not determine the current branch."
+  exit 1
+fi
+
+# Define branch naming regex
+branch_regex="^(feature|fix|hotfix|experiment)/(alpha|beta|next|main)/[a-z0-9-]+-[a-z0-9-]+$"
+
+# Check if branch name matches the convention
+if [[ ! "$current_branch" =~ $branch_regex ]]; then
+  echo "Error: Branch name '$current_branch' does not follow the required convention:"
+  echo "  <type>/<target-branch>/<scope>-<description>"
+  echo "Examples:"
+  echo "  feature/alpha/user-login"
+  echo "  fix/beta/1234-button-alignment"
+  echo "  hotfix/main/checkout-error"
+  exit 1
+fi
+
+echo "Branch name '$current_branch' follows the required convention. Proceeding."
