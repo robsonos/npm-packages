@@ -1,0 +1,31 @@
+{
+  "name": "@robsonos/myriota-updater-cli",
+  "version": "0.0.1",
+  "keywords": [
+    "Myriota",
+    "updater",
+    "Myriota SDK",
+    "firmware",
+    "serial",
+    "UART"
+  ],
+  "author": {
+    "name": "Robson Oliveira",
+    "email": "robsonos@outlook.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robsonos/npm-packages",
+    "directory": "packages/myriota-updater-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/robsonos/npm-packages"
+  },
+  "type": "commonjs",
+  "main": "./dist/index.cjs",
+  "typings": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {}
+}

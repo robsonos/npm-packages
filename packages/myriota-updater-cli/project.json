@@ -1,0 +1,31 @@
+{
+  "name": "myriota-updater-cli",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/myriota-updater-cli/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/myriota-updater-cli/dist",
+        "main": "packages/myriota-updater-cli/src/index.ts",
+        "tsConfig": "packages/myriota-updater-cli/tsconfig.lib.json",
+        "format": ["cjs"],
+        "declarationRootDir": "packages/myriota-updater-cli/src"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/myriota-updater-cli/jest.config.ts"
+      }
+    }
+  }
+}
