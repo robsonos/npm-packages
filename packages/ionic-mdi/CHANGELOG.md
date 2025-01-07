@@ -1,3 +1,7 @@
+## 0.1.4-alpha.0 (2025-01-07)
+
+This was a version bump only for ionic-mdi to align it with other projects, there were no code changes.
+
 ## 0.1.3 (2025-01-04)
 
 ### 🩹 Fixes
