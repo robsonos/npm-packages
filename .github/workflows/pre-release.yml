@@ -69,13 +69,14 @@ jobs:
           npx nx release changelog ${{ steps.get-latest-tag.outputs.tag }} \
             --git-commit \
             --git-tag=false \
-            --git-push
+            --git-push \
+            --dry-run=${{ !env.ACT }}
         #    --from=${{ steps.get-from-tag.outputs.tag }}
 
       - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-        run: npx nx release publish --tag ${{ steps.get-channel.outputs.channel }}
+        run: npx nx release publish --tag ${{ steps.get-channel.outputs.channel }} --dry-run=${{ !env.ACT }}
 
       # - name: Tag last-prerelease
       #   shell: bash

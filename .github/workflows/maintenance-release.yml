@@ -47,9 +47,9 @@ jobs:
       - name: Create maintenance release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release --skip-publish
+        run: npx nx release --skip-publish --dry-run=${{ !env.ACT }}
 
       - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-        run: npx nx release publish --tag ${{ github.event.inputs.branch }}
+        run: npx nx release publish --tag ${{ github.event.inputs.branch }} --dry-run=${{ !env.ACT }}
