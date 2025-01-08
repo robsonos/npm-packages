@@ -33,6 +33,9 @@ jobs:
       - name: Set up git bot user
         uses: snow-actions/git-config-user@v1.0.0
 
+      - name: Generate coverage badge
+        run: npx nx run-many -t coverage-badge
+
       - name: Validate branch input
         run: |
           branch=${{ github.event.inputs.branch }}

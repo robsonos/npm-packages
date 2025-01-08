@@ -1,7 +1,7 @@
 <p align="center">
   <img 
       alt="Maintenance status"
-      src="https://img.shields.io/maintenance/yes/2024?style=flat-square">
+      src="https://img.shields.io/maintenance/yes/2025?style=flat-square">
   <a
     href="https://github.com/robsonos/npm-packages/actions/workflows/ci.yml"
     style="color: inherit; text-decoration: none;">
@@ -9,6 +9,9 @@
       alt="GitHub Workflow Status (with event)"
       src="https://img.shields.io/github/actions/workflow/status/robsonos/npm-packages/ci.yml">
   </a>
+   <img
+      alt="GitHub Workflow Status (with event)"
+      src="./docs/coverage/badges.svg">
   <a
     href="https://www.npmjs.com/package/@robsonos/ionic-mdi"
     style="color: inherit; text-decoration: none;">

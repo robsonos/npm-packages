@@ -22,6 +22,12 @@
       "options": {
         "jestConfig": "packages/ionic-mdi/jest.config.ts"
       }
+    },
+    "coverage-badge": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "coverage-badges-cli --source {projectRoot}/test-output/jest/coverage/coverage-summary.json --output {projectRoot}/docs/coverage/badges.svg"
+      }
     }
   }
 }
