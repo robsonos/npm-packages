@@ -3,10 +3,10 @@ name: Release maintenance
 on:
   workflow_dispatch:
     inputs:
-      skip-nx-cache:
+      use-nx-cache:
         type: boolean
-        description: 'Skip NX cache'
-        default: false
+        description: 'Use NX cache'
+        default: true
       publish:
         type: boolean
         description: 'Publish to npm'
@@ -19,13 +19,15 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate branch input
+      - name: Determine release channel
+        id: get-channel
         run: |
           branch=${GITHUB_REF#refs/heads/}
           if [[ ! "$branch" =~ ^[a-zA-Z0-9_-]+@[0-9]+\.([0-9]+|x)\.x$ ]]; then
             echo "Error: Branch $branch is not a maintenance branch"
             exit 1
-          fi
+          fi          
+          echo "channel=$branch" >> $GITHUB_OUTPUT
 
       - name: Check out Git repository
         uses: actions/checkout@v4
@@ -51,19 +53,39 @@ jobs:
 
       - name: Generate coverage badge
         run: |
-          npx nx affected -t coverage-badge --skipNxCache=${{ inputs.skip-nx-cache }}
+          npx nx affected -t coverage-badge --skipNxCache=${{ !inputs.use-nx-cache }}
           git add .
 
-      - name: Create maintenance release
+      - name: Create version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release --skip-publish --dry-run=${{ env.ACT || 'false'  }}
+        run: npx nx release version
+
+      - name: Get the tag that was just created
+        id: get-latest-tag
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0)
+          semver=${latest_tag#*@}
+          echo "tag=$semver" >> $GITHUB_OUTPUT
+
+      - name: Create changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx nx release changelog ${{ steps.get-latest-tag.outputs.tag }} --dry-run=${{ env.ACT || 'false'  }}
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          tags: true
 
       - name: Publish
         if: ${{ inputs.publish }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-        run: npx nx release publish \
-          --tag ${{ github.event.inputs.branch }} \
-          --skipNxCache=${{ inputs.skip-nx-cache }} \
-          --dry-run=${{ env.ACT || 'false'  }}
+        run: |
+          npx nx release publish \
+            --tag ${{ steps.get-channel.outputs.channel }} \
+            --skipNxCache=${{ !inputs.use-nx-cache }} \
+            --dry-run=${{ env.ACT || 'false'  }}

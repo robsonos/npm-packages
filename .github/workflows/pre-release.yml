@@ -3,10 +3,10 @@ name: Release pre-release
 on:
   workflow_dispatch:
     inputs:
-      skip-nx-cache:
+      use-nx-cache:
         type: boolean
-        description: 'Skip NX cache'
-        default: false
+        description: 'Use NX cache'
+        default: true
       publish:
         type: boolean
         description: 'Publish to npm'
@@ -54,13 +54,13 @@ jobs:
 
       - name: Generate coverage badge
         run: |
-          npx nx affected -t coverage-badge --skipNxCache=${{ inputs.skip-nx-cache }}
+          npx nx affected -t coverage-badge --skipNxCache=${{ !inputs.use-nx-cache }}
           git add .
 
       - name: Create version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release version prerelease --preid=${{ steps.get-channel.outputs.channel }} --git-tag
+        run: npx nx release version prerelease --preid=${{ steps.get-channel.outputs.channel }}
 
       - name: Get the tag that was just created
         id: get-latest-tag
@@ -80,12 +80,7 @@ jobs:
       - name: Create changelog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npx nx release changelog ${{ steps.get-latest-tag.outputs.tag }} \
-            --git-commit \
-            --git-tag=false \
-            --git-push \
-            --dry-run=${{ env.ACT || 'false'  }}
+        run: npx nx release changelog ${{ steps.get-latest-tag.outputs.tag }} --dry-run=${{ env.ACT || 'false'  }}
         #    --from=${{ steps.get-from-tag.outputs.tag }}
 
       # - name: Tag last-prerelease
@@ -108,5 +103,5 @@ jobs:
         run: |
           npx nx release publish \
             --tag ${{ steps.get-channel.outputs.channel }} \
-            --skipNxCache=${{ inputs.skip-nx-cache }} \
+            --skipNxCache=${{ !inputs.use-nx-cache }} \
             --dry-run=${{ env.ACT || 'false'  }}
