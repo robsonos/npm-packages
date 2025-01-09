@@ -2,6 +2,15 @@ name: Release latest
 
 on:
   workflow_dispatch:
+    inputs:
+      skip-nx-cache:
+        type: boolean
+        description: 'Skip NX cache'
+        default: false
+      publish:
+        type: boolean
+        description: 'Publish to npm'
+        default: true
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
@@ -28,11 +37,17 @@ jobs:
       - name: Set up git bot user
         uses: snow-actions/git-config-user@v1.0.0
 
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        if: ${{ !env.ACT }}
+        uses: nrwl/nx-set-shas@v4
+
       - name: Generate coverage badge
-        run: npx nx run-many -t coverage-badge
+        run: |
+          npx nx affected -t coverage-badge --skipNxCache=${{ inputs.skip-nx-cache }}
+          git add .
 
       - name: Create latest release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release -y --dry-run=${{ !env.ACT }}
+        run: npx nx release -y --skip-publish=${{ !inputs.publish }} --dry-run=${{ env.ACT || 'false'  }}

@@ -22,13 +22,17 @@
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "inputs": ["production", "^production"],
+      "cache": true
     },
     "nx-release-publish": {
       "dependsOn": ["build"],
       "options": {
         "packageRoot": "dist/packages/{projectName}"
       }
+    },
+    "coverage-badge": {
+      "dependsOn": ["test"]
     },
     "@nx/eslint:lint": {
       "cache": true,
@@ -43,13 +47,13 @@
       "cache": true,
       "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
       "options": {
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "codeCoverage": true,
+        "coverageReporters": ["json-summary"]
       },
       "configurations": {
         "ci": {
-          "ci": true,
-          "codeCoverage": true,
-          "coverageReporters": ["json-summary"]
+          "ci": true
         }
       }
     },

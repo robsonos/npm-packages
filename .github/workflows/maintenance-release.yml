@@ -3,10 +3,14 @@ name: Release maintenance
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        type: string
-        description: 'Maintenance branch to release from (e.g., package-name@1.x or package-name@1.0.x)'
-        required: true
+      skip-nx-cache:
+        type: boolean
+        description: 'Skip NX cache'
+        default: false
+      publish:
+        type: boolean
+        description: 'Publish to npm'
+        default: true
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
@@ -15,6 +19,14 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - name: Validate branch input
+        run: |
+          branch=${GITHUB_REF#refs/heads/}
+          if [[ ! "$branch" =~ ^[a-zA-Z0-9_-]+@[0-9]+\.([0-9]+|x)\.x$ ]]; then
+            echo "Error: Branch $branch is not a maintenance branch"
+            exit 1
+          fi
+
       - name: Check out Git repository
         uses: actions/checkout@v4
         with:
@@ -33,23 +45,25 @@ jobs:
       - name: Set up git bot user
         uses: snow-actions/git-config-user@v1.0.0
 
-      - name: Generate coverage badge
-        run: npx nx run-many -t coverage-badge
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        if: ${{ !env.ACT }}
+        uses: nrwl/nx-set-shas@v4
 
-      - name: Validate branch input
+      - name: Generate coverage badge
         run: |
-          branch=${{ github.event.inputs.branch }}
-          if [[ ! "$branch" =~ ^[a-zA-Z0-9-_]+@[0-9]+\.[0-9]*\.?x$ ]]; then
-            echo "Invalid branch format: $branch"
-            exit 1
-          fi
+          npx nx affected -t coverage-badge --skipNxCache=${{ inputs.skip-nx-cache }}
+          git add .
 
       - name: Create maintenance release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release --skip-publish --dry-run=${{ !env.ACT }}
+        run: npx nx release --skip-publish --dry-run=${{ env.ACT || 'false'  }}
 
       - name: Publish
+        if: ${{ inputs.publish }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-        run: npx nx release publish --tag ${{ github.event.inputs.branch }} --dry-run=${{ !env.ACT }}
+        run: npx nx release publish \
+          --tag ${{ github.event.inputs.branch }} \
+          --skipNxCache=${{ inputs.skip-nx-cache }} \
+          --dry-run=${{ env.ACT || 'false'  }}
