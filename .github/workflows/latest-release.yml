@@ -50,4 +50,4 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release -y --skip-publish=${{ !inputs.publish }} --dry-run=${{ env.ACT || 'false'  }}
+        run: npx nx release --skip-publish=${{ !inputs.publish }} --dry-run=${{ env.ACT || 'false'  }}
