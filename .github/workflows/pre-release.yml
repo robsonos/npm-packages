@@ -105,7 +105,8 @@ jobs:
         if: ${{ inputs.publish }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-        run: npx nx release publish \
-          --tag ${{ steps.get-channel.outputs.channel }} \
-          --skipNxCache=${{ inputs.skip-nx-cache }} \
-          --dry-run=${{ env.ACT || 'false'  }}
+        run: |
+          npx nx release publish \
+            --tag ${{ steps.get-channel.outputs.channel }} \
+            --skipNxCache=${{ inputs.skip-nx-cache }} \
+            --dry-run=${{ env.ACT || 'false'  }}

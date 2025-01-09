@@ -97,12 +97,18 @@
       "generatorOptions": {
         "fallbackCurrentVersionResolver": "disk",
         "updateDependents": "auto"
+      },
+      "git": {
+        "commitMessage": "chore(release): {version} [skip ci]"
       }
     },
     "changelog": {
       "automaticFromRef": true,
       "projectChangelogs": {
         "createRelease": "github"
+      },
+      "git": {
+        "commitMessage": "chore(release): {version} [skip ci]"
       }
     }
   }
