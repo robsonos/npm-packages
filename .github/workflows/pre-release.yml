@@ -60,10 +60,9 @@ jobs:
           npx nx affected \
             -t coverage-badge \
             -t version \
-            --configuration=prerelease \
-            --releaseAs=prerelease \
-            --baseBranch=${{ steps.get-channel.outputs.channel }} \
-            --preid=${{ steps.get-channel.outputs.channel }} \
-            --skipNxCache=${{ !inputs.use-nx-cache }} \
-            --dry-run=${{ env.ACT || 'false'  }} \
-            --parallel=1
+            -c prerelease \
+            --baseBranch ${{ steps.get-channel.outputs.channel }} \
+            --preid ${{ steps.get-channel.outputs.channel }} \
+            --skipNxCache ${{ !inputs.use-nx-cache }} \
+            --dry-run ${{ env.ACT || 'false'  }} \
+            --parallel 1

@@ -1,0 +1,12 @@
+diff --git a/node_modules/@jscutlery/semver/src/executors/version/index.js b/node_modules/@jscutlery/semver/src/executors/version/index.js
+index 2121afc..1f41b0a 100644
+--- a/node_modules/@jscutlery/semver/src/executors/version/index.js
++++ b/node_modules/@jscutlery/semver/src/executors/version/index.js
+@@ -119,6 +119,7 @@ function version(options, context) {
+                     version,
+                     projectName,
+                     tag,
++                    preid,
+                     previousTag: (0, tag_1.formatTag)({
+                         tagPrefix,
+                         version: newVersion.previousVersion,

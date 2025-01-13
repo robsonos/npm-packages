@@ -49,6 +49,7 @@
           ]
         },
         "prerelease": {
+          "releaseAs": "prerelease",
           "commitMessageFormat": "chore({projectName}): publish pre-release version ${version} [skip ci]",
           "postTargets": [
             "ionic-mdi:build:production",
@@ -78,6 +79,7 @@
       "options": {
         "access": "public",
         "distFolderPath": "dist/packages/ionic-mdi",
+        "tag": "{preid}",
         "checkExisting": "warning"
       },
       "configurations": {
