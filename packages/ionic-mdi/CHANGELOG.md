@@ -1,3 +1,13 @@
+
+## [0.1.4-alpha.2](https://github.com/robsonos/npm-packages/compare/ionic-mdi@0.1.4-next.1...ionic-mdi@0.1.4-alpha.2) (2025-01-13)
+
+
+### Bug Fixes
+
+* **repo:** test @jscutlery/semver for releases [skip ci] ([8292df5](https://github.com/robsonos/npm-packages/commit/8292df5f08968686a31aa0c2478292dd69380118))
+
+
+
 ## 0.1.4-next.1 (2025-01-09)
 
 This was a version bump only for ionic-mdi to align it with other projects, there were no code changes.
