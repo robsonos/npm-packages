@@ -3,11 +3,13 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "postinstall": "patch-package",
     "prepare": "husky"
   },
   "dependencies": {
     "@material-design-icons/svg": "^0.14.13",
-    "material-design-icons-svg": "^3.3.1"
+    "material-design-icons-svg": "^3.3.1",
+    "patch-package": "^8.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.6.1",
