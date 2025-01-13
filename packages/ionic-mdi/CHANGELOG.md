@@ -1,4 +1,8 @@
 
+## [0.1.4-beta.2](https://github.com/robsonos/npm-packages/compare/ionic-mdi@0.1.4-alpha.3...ionic-mdi@0.1.4-beta.2) (2025-01-13)
+
+
+
 ## [0.1.4-alpha.3](https://github.com/robsonos/npm-packages/compare/ionic-mdi@0.1.4-beta.1...ionic-mdi@0.1.4-alpha.3) (2025-01-13)
 
 
