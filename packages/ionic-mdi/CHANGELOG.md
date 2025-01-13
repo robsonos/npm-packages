@@ -1,4 +1,13 @@
 
+## [0.1.4-alpha.3](https://github.com/robsonos/npm-packages/compare/ionic-mdi@0.1.4-beta.1...ionic-mdi@0.1.4-alpha.3) (2025-01-13)
+
+
+### Bug Fixes
+
+* **repo:** add tag to npm publish ([e224e67](https://github.com/robsonos/npm-packages/commit/e224e67f3a991af8196ae7f3717bcf2b9182bba9))
+
+
+
 ## [0.1.4-beta.1](https://github.com/robsonos/npm-packages/compare/ionic-mdi@0.1.4-alpha.2...ionic-mdi@0.1.4-beta.1) (2025-01-13)
 
 
