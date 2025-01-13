@@ -52,56 +52,18 @@ jobs:
         if: ${{ !env.ACT }}
         uses: nrwl/nx-set-shas@v4
 
-      - name: Generate coverage badge
-        run: |
-          npx nx affected -t coverage-badge --skipNxCache=${{ !inputs.use-nx-cache }}
-          git add .
-
       - name: Create version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release version prerelease --preid=${{ steps.get-channel.outputs.channel }}
-
-      - name: Get the tag that was just created
-        id: get-latest-tag
-        run: |
-          latest_tag=$(git describe --tags --abbrev=0)
-          semver=${latest_tag#*@}
-          echo "tag=$semver" >> $GITHUB_OUTPUT
-
-      # - name: Get the last pre-release tag
-      #   id: get-from-tag
-      #   run: |
-      #     if git rev-parse -q --verify "refs/tags/last-${{ steps.get-channel.outputs.channel }}" >/dev/null; then
-      #       echo "tag=last-${{ steps.get-channel.outputs.channel }}" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "tag=HEAD" >> $GITHUB_OUTPUT
-      #     fi
-      - name: Create changelog
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release changelog ${{ steps.get-latest-tag.outputs.tag }} --dry-run=${{ env.ACT || 'false'  }}
-        #    --from=${{ steps.get-from-tag.outputs.tag }}
-
-      # - name: Tag last-prerelease
-      #   shell: bash
-      #   run: git tag -f last-${{ steps.get-channel.outputs.channel }}
-
-      # TODO: https://github.com/nrwl/nx/issues/22073
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.8.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          tags: true
-          # force: true
-
-      - name: Publish
-        if: ${{ inputs.publish }}
-        env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
         run: |
-          npx nx release publish \
-            --tag ${{ steps.get-channel.outputs.channel }} \
+          npx nx affected \
+            -t coverage-badge \
+            -t version \
+            --configuration=prerelease \
+            --releaseAs=prerelease \
+            --baseBranch=${{ steps.get-channel.outputs.channel }} \
+            --preid=${{ steps.get-channel.outputs.channel }} \
             --skipNxCache=${{ !inputs.use-nx-cache }} \
-            --dry-run=${{ env.ACT || 'false'  }}
+            --dry-run=${{ env.ACT || 'false'  }} \
+            --parallel=1

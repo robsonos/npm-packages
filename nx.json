@@ -88,32 +88,5 @@
         "targetName": "test"
       }
     }
-  ],
-  "release": {
-    "projects": ["packages/*"],
-    "projectsRelationship": "independent",
-    "version": {
-      "conventionalCommits": true,
-      "generatorOptions": {
-        "fallbackCurrentVersionResolver": "disk",
-        "updateDependents": "auto"
-      },
-      "git": {
-        "commitMessage": "chore(release): {version} [skip ci]",
-        "tag": true
-      }
-    },
-    "changelog": {
-      "automaticFromRef": true,
-      "projectChangelogs": {
-        "createRelease": "github"
-      },
-      "git": {
-        "commitMessage": "chore(release): {version} [skip ci]",
-        "tag": false,
-        "commit": true,
-        "push": true
-      }
-    }
-  }
+  ]
 }
