@@ -10,7 +10,7 @@
       src="https://img.shields.io/github/actions/workflow/status/robsonos/npm-packages/ci.yml?style=flat-square">
   </a>
    <img
-      alt="GitHub Workflow Status (with event)"
+      alt="Code coverage badge"
       src="./docs/coverage/badge.svg">
   <a
     href="https://www.npmjs.com/package/@robsonos/ionic-mdi"
