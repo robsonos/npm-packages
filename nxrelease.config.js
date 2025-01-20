@@ -9,6 +9,7 @@ const writerOpts = () => {
         discard = false;
       });
 
+      // Add user friendly type
       if (commit.type === 'feat') {
         commit.type = '🚀 Features';
       } else if (commit.type === 'fix') {
@@ -41,6 +42,11 @@ const writerOpts = () => {
       if (typeof commit.subject === `string`) {
         // Filter out Merge pull request commits
         if (commit.subject.indexOf('Merge pull request') >= 0) {
+          return;
+        }
+
+        // Filter out repo scope
+        if (commit.scope === 'repo') {
           return;
         }
 
