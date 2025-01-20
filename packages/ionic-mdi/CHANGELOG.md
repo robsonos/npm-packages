@@ -1,3 +1,23 @@
+# 1.0.0 (2025-01-20)
+
+
+### 🩹 Fixes
+
+* **ionic-mdi:** add  package keywords ([b04700b](https://github.com/robsonos/npm-packages/commit/b04700b5548031e246d2efb12b32bab438ae80c3))
+* **ionic-mdi:** add license files ([42cb8a5](https://github.com/robsonos/npm-packages/commit/42cb8a5c14f892480bb3a019405baa4f19248dcf))
+* **ionic-mdi:** fix output folder ([1cee149](https://github.com/robsonos/npm-packages/commit/1cee149234ef849bb609e27598b3960985f63c27))
+* **ionic-mdi:** update license info on packages.json ([6bf0146](https://github.com/robsonos/npm-packages/commit/6bf01460bad614d7df59539ce0e8a18c2591c3a6))
+* **repo:** add coverage badge ([0937de7](https://github.com/robsonos/npm-packages/commit/0937de78e2689fe41ac624787d6800e80e62e63b))
+* **repo:** add tag to npm publish ([e224e67](https://github.com/robsonos/npm-packages/commit/e224e67f3a991af8196ae7f3717bcf2b9182bba9))
+* **repo:** improve release workflows [skip ci] ([c373fb0](https://github.com/robsonos/npm-packages/commit/c373fb07683acb168c4796365c6e18c1d96be29d))
+* **repo:** improve release workflows [skip ci] ([1ef6519](https://github.com/robsonos/npm-packages/commit/1ef65193c72d3f7f6046c5979902c3002e7cc81e))
+* **repo:** test @jscutlery/semver for releases [skip ci] ([8292df5](https://github.com/robsonos/npm-packages/commit/8292df5f08968686a31aa0c2478292dd69380118))
+
+
+### 🚀 Features
+
+* **ionic-mdi:** initial release ([dcb7510](https://github.com/robsonos/npm-packages/commit/dcb75105ade641dcb58f7c74f03eeed7574615ce))
+
 # 1.0.0-beta.1 (2025-01-20)
 
 
