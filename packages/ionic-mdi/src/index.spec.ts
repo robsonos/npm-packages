@@ -166,7 +166,7 @@ describe('SVG processing tests', () => {
       expect(clearDistDirectorySpy).toHaveBeenCalled();
       expect(createPackageJsonSpy).toHaveBeenCalled();
       expect(processSvgDirectorySpy).toHaveBeenCalled();
-      expect(mockedCopy).toHaveBeenCalledTimes(3); // README.md, LICENSE and docs folder
+      expect(mockedCopy).toHaveBeenCalledTimes(2); // README.md and LICENSE
     });
   });
 });

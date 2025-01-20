@@ -147,12 +147,6 @@ export class IconBuilder {
         join(distDirectory, 'LICENSE')
       );
 
-      // Add coverage badge
-      await fs.copy(
-        join(rootDirectory, '..', 'docs'),
-        join(distDirectory, 'docs')
-      );
-
       await IconBuilder.createPackageJson(distDirectory, packageJsonFilePath);
 
       await IconBuilder.processSvgDirectory(
