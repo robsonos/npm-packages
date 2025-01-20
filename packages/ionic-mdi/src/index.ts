@@ -1,4 +1,4 @@
-import path, { join } from 'path';
+import { join } from 'path';
 
 import fs from 'fs-extra';
 import pLimit from 'p-limit';
@@ -16,7 +16,7 @@ export class IconBuilder {
     srcSvgDir: string,
     style: string
   ) => {
-    const filePath = path.join(srcSvgDir, fileName);
+    const filePath = join(srcSvgDir, fileName);
     const svgContent = await fs.readFile(filePath, 'utf8');
     const preparedSvg = svgContent.replace(/"/g, "'");
     const iconName = IconBuilder.formatIconName(fileName, style);
@@ -80,7 +80,7 @@ export class IconBuilder {
       iconStyles.map(async (dirent) => {
         if (dirent.isDirectory()) {
           const style = dirent.name;
-          const srcSvgDir = path.join(srcDir, style);
+          const srcSvgDir = join(srcDir, style);
           await IconBuilder.processSvgStyle(
             srcSvgDir,
             style,
@@ -110,9 +110,7 @@ export class IconBuilder {
   public static build = async () => {
     const rootDirectory = __dirname;
     const packageJsonFilePath = join(rootDirectory, '..', 'package.json');
-    const readmeFilePath = join(rootDirectory, '..', 'README.md');
-    const licenseFilePath = join(rootDirectory, '..', 'LICENSE');
-    const srcIconsDirectory = path.join(
+    const srcIconsDirectory = join(
       rootDirectory,
       '..',
       '..',
@@ -121,7 +119,7 @@ export class IconBuilder {
       '@material-design-icons',
       'svg'
     );
-    const distDirectory = path.join(
+    const distDirectory = join(
       rootDirectory,
       '..',
       '..',
@@ -130,15 +128,30 @@ export class IconBuilder {
       'packages',
       'ionic-mdi'
     );
-    const esmIconsPath = path.join(distDirectory, 'index.mjs');
-    const cjsIconsPath = path.join(distDirectory, 'index.js');
-    const dtsIconsPath = path.join(distDirectory, 'index.d.ts');
+    const esmIconsPath = join(distDirectory, 'index.mjs');
+    const cjsIconsPath = join(distDirectory, 'index.js');
+    const dtsIconsPath = join(distDirectory, 'index.d.ts');
 
     try {
       await IconBuilder.clearDistDirectory(distDirectory);
 
-      await fs.copy(readmeFilePath, path.join(distDirectory, 'README.md'));
-      await fs.copy(licenseFilePath, path.join(distDirectory, 'LICENSE'));
+      // Add readme
+      await fs.copy(
+        join(rootDirectory, '..', 'README.md'),
+        join(distDirectory, 'README.md')
+      );
+
+      // Add license file
+      await fs.copy(
+        join(rootDirectory, '..', 'LICENSE'),
+        join(distDirectory, 'LICENSE')
+      );
+
+      // Add coverage badge
+      await fs.copy(
+        join(rootDirectory, '..', 'docs'),
+        join(distDirectory, 'docs')
+      );
 
       await IconBuilder.createPackageJson(distDirectory, packageJsonFilePath);
 
