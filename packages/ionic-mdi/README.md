@@ -11,7 +11,7 @@
   </a>
    <img
       alt="Code coverage badge"
-      src="./docs/coverage/badge.svg">
+      src="https://raw.githubusercontent.com/robsonos/npm-packages/refs/heads/main/packages/ionic-mdi/docs/coverage/badge.svg">
   <a
     href="https://www.npmjs.com/package/@robsonos/ionic-mdi"
     style="color: inherit; text-decoration: none;">
