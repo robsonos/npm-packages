@@ -19,7 +19,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Determine release channel
+      - name: Verify release channel
         id: get-channel
         run: |
           branch=${GITHUB_REF#refs/heads/}

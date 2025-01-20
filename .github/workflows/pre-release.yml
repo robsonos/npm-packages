@@ -20,7 +20,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Determine release channel
+      - name: Verify release channel
         id: get-channel
         run: |
           branch=${GITHUB_REF#refs/heads/}
@@ -45,24 +45,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Set up git bot user
-        uses: snow-actions/git-config-user@v1.0.0
-
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         if: ${{ !env.ACT }}
         uses: nrwl/nx-set-shas@v4
 
-      - name: Create version
+      - name: Release version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
         run: |
           npx nx affected \
             -t coverage-badge \
-            -t version \
-            -c prerelease \
-            --baseBranch ${{ steps.get-channel.outputs.channel }} \
-            --preid ${{ steps.get-channel.outputs.channel }} \
+            -t semantic-release \
             --skipNxCache ${{ !inputs.use-nx-cache }} \
-            --dry-run ${{ env.ACT || 'false'  }} \
-            --parallel 1
+            --npm ${{ inputs.publish }} \
+            --parallel=false \
+            --dry-run ${{ env.ACT || 'false'  }}

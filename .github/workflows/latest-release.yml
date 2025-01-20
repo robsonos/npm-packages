@@ -19,6 +19,14 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - name: Verify release channel
+        run: |
+          branch=${GITHUB_REF#refs/heads/}
+          if [[ "$branch" != "main" ]]; then
+            echo "Error: Branch '$branch' is not a valid release branch. Valid options are: main."
+            exit 1
+          fi
+
       - name: Check out Git repository
         uses: actions/checkout@v4
         with:
@@ -37,45 +45,27 @@ jobs:
       - name: Set up git bot user
         uses: snow-actions/git-config-user@v1.0.0
 
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        if: ${{ !env.ACT }}
-        uses: nrwl/nx-set-shas@v4
-
-      - name: Generate coverage badge
-        run: |
-          npx nx affected -t coverage-badge --skipNxCache=${{ !inputs.use-nx-cache }}
-          git add .
-
       - name: Create version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release version
-
-      - name: Get the tag that was just created
-        id: get-latest-tag
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
         run: |
-          latest_tag=$(git describe --tags --abbrev=0)
-          semver=${latest_tag#*@}
-          echo "tag=$semver" >> $GITHUB_OUTPUT
+          npx nx affected \
+            -t coverage-badge \
+            -t version \
+            -c release \
+            --base=latest \
+            --skipNxCache ${{ !inputs.use-nx-cache }} \
+            --dry-run ${{ env.ACT || 'false'  }} \
+            --parallel 1
 
-      - name: Create changelog
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx nx release changelog ${{ steps.get-latest-tag.outputs.tag }} --dry-run=${{ env.ACT || 'false'  }}
+      - name: Tag latest
+        shell: bash
+        run: git tag -f latest
 
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          force: true
           tags: true
-
-      - name: Publish
-        if: ${{ inputs.publish }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-        run: |
-          npx nx release publish \
-            --tag latest \
-            --skipNxCache=${{ !inputs.use-nx-cache }} \
-            --dry-run=${{ env.ACT || 'false'  }}

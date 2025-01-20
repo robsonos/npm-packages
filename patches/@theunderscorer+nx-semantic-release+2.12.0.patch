@@ -1,0 +1,36 @@
+diff --git a/node_modules/@theunderscorer/nx-semantic-release/src/config/apply-tokens.js b/node_modules/@theunderscorer/nx-semantic-release/src/config/apply-tokens.js
+index 9288750..6e47260 100644
+--- a/node_modules/@theunderscorer/nx-semantic-release/src/config/apply-tokens.js
++++ b/node_modules/@theunderscorer/nx-semantic-release/src/config/apply-tokens.js
+@@ -13,11 +13,26 @@ function applyTokensToSemanticReleaseOptions(options, tokens) {
+             .replaceAll('${PROJECT_NAME}', tokens.projectName)
+             .replaceAll('${WORKSPACE_DIR}', tokens.workspaceDir);
+     };
+-    return (0, deep_map_1.default)(options, (value) => {
+-        if (typeof value === 'string') {
+-            return replaceTokens(value);
++
++    function traverseAndReplace(obj, replaceTokens) {
++        if (Array.isArray(obj)) {
++            return obj.map((item) => traverseAndReplace(item, replaceTokens)); // Handle arrays
++        } else if (typeof obj === "object" && obj !== null) {
++            return Object.keys(obj).reduce((acc, key) => {
++                acc[key] = traverseAndReplace(obj[key], replaceTokens); // Recurse into objects
++                return acc;
++            }, {});
++        } else if (typeof obj === "function") {
++            return obj; // Preserve functions
++        } else if (typeof obj === "string") {
++            return replaceTokens(obj); // Replace tokens in strings
+         }
+-        return value;
+-    });
++        return obj; // Return other types as-is
++    }
++
++    const testReturn = traverseAndReplace(options, replaceTokens);
++
++
++    return testReturn
+ }
+ //# sourceMappingURL=apply-tokens.js.map
