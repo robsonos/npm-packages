@@ -31,6 +31,7 @@
     },
     "semantic-release": {
       "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+      "dependsOn": ["ionic-mdi:coverage-badge"],
       "options": {
         "gitAssets": ["{projectRoot}/docs/coverage/badge.svg"],
         "buildTarget": "ionic-mdi:build",
