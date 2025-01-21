@@ -1,97 +1,140 @@
+const { execFileSync } = require('child_process');
+
 const writerOpts = () => {
   return {
-    transform: (commit, context) => {
-      let discard = true;
-      const issues = [];
-
-      commit.notes.forEach((note) => {
-        note.title = `### ⚠️  Breaking Changes`;
-        discard = false;
-      });
-
-      // Add user friendly type
-      if (commit.type === 'feat') {
-        commit.type = '🚀 Features';
-      } else if (commit.type === 'fix') {
-        commit.type = '🩹 Fixes';
-      } else if (commit.type === 'perf') {
-        commit.type = '🔥 Performance';
-      } else if (commit.type === 'revert' || commit.revert) {
-        commit.type = '⏪ Revert';
-      } else if (discard) {
-        return;
-      } else if (commit.type === 'docs') {
-        commit.type = '⏪ Revert';
-      } else if (commit.type === 'style') {
-        commit.type = '🎨 Styles';
-      } else if (commit.type === 'refactor') {
-        commit.type = '💅 Refactors';
-      } else if (commit.type === 'test') {
-        commit.type = '✅ Tests';
-      } else if (commit.type === 'build') {
-        commit.type = '📦 Build';
-      } else if (commit.type === 'ci') {
-        commit.type = '🤖 CI';
-      }
-
-      // Truncate Commit Hashes
-      if (typeof commit.hash === `string`) {
-        commit.shortHash = commit.hash.substring(0, 7);
-      }
-
-      if (typeof commit.subject === `string`) {
-        // Filter out Merge pull request commits
-        if (commit.subject.indexOf('Merge pull request') >= 0) {
-          return;
-        }
-
-        // Filter out repo scope
-        if (commit.scope === 'repo') {
-          return;
-        }
-
-        // Construct Issue Links
-        let url = context.repository
-          ? `${context.host}/${context.owner}/${context.repository}`
-          : context.repoUrl;
-        if (url) {
-          url = `${url}/issues/`;
-          commit.subject = commit.subject.replace(/#([0-9]+)/g, (_, issue) => {
-            issues.push(issue);
-            return `[#${issue}](${url}${issue})`;
-          });
-        }
-
-        // Create user link from mentions
-        if (context.host) {
-          commit.subject = commit.subject.replace(
-            /\B@([a-z0-9](?:-?[a-z0-9/]){0,38})/g,
-            (_, username) => {
-              if (username.includes('/')) {
-                return `@${username}`;
-              }
-
-              return `[@${username}](${context.host}/${username})`;
-            }
+    finalizeContext: (context, options, commits, keyCommit) => {
+      const getGitHubUsername = (email) => {
+        // Get username from noreply email
+        if (email.endsWith('@users.noreply.github.com')) {
+          const match = email.match(
+            /^(\d+\+)?([^@]+)@users\.noreply\.github\.com$/
           );
-        }
-      }
-
-      // Remove duplicate references
-      commit.references = commit.references.filter((reference) => {
-        if (issues.indexOf(reference.issue) === -1) {
-          return true;
+          if (match && match[2]) {
+            return match[2];
+          }
         }
 
-        return false;
-      });
+        // Get username from GitHub API
+        try {
+          const response = JSON.parse(
+            execFileSync('gh', ['api', `/search/users?q=${email}`], {
+              encoding: 'utf8',
+            })
+          );
 
-      return commit;
+          return response.items && response.items[0]?.login
+            ? response.items[0].login
+            : '';
+        } catch (err) {
+          console.warn(
+            `Failed to fetch GitHub username for email: ${email}`,
+            err
+          );
+          return '';
+        }
+      };
+
+      const isFirstTimeContributor = (username, context) => {
+        // Get commits by this user
+        try {
+          const commits = JSON.parse(
+            execFileSync(
+              'gh',
+              [
+                'api',
+                `/repos/${context.owner}/${context.repository}/commits?author=${username}&per_page=1`,
+              ],
+              { encoding: 'utf8' }
+            )
+          );
+
+          return commits.length === 0;
+        } catch (err) {
+          console.warn(`Error checking contributions for ${username}:`, err);
+
+          // Assume not first-time if an error occurs
+          return false;
+        }
+      };
+
+      const createContributors = (commits, context) => {
+        const authors = Object.entries(
+          commits.reduce((obj, commit) => {
+            const { name, email } = commit.raw.author || {};
+            if (email && name) {
+              if (!obj[name]) {
+                obj[name] = { emails: new Set(), username: `@${name}` };
+              }
+              obj[name].emails.add(email);
+            }
+            return obj;
+          }, {})
+        );
+
+        return authors.map(([name, data]) => {
+          const emailArray = Array.from(data.emails);
+          let username = '';
+          let isFirstTime = false;
+
+          for (const email of emailArray) {
+            username = getGitHubUsername(email);
+            if (username) {
+              // Replace with your repo
+              isFirstTime = isFirstTimeContributor(username, context);
+
+              // Stop after finding a valid username
+              break;
+            }
+          }
+
+          return {
+            name,
+            username: username ? `@${username}` : '',
+            firstTime: isFirstTime,
+          };
+        });
+      };
+
+      context.contributors = createContributors(commits, context);
+
+      return context;
     },
-    groupBy: 'type',
-    commitGroupsSort: 'title',
-    commitsSort: ['scope', 'subject'],
-    noteGroupsSort: 'title',
+    mainTemplate: `
+{{> header}}
+
+{{#if noteGroups}}
+{{#each noteGroups}}
+
+### ⚠ {{title}}
+
+{{#each notes}}
+* {{#if commit.scope}}**{{commit.scope}}:** {{/if}}{{text}}
+{{/each}}
+{{/each}}
+{{/if}}
+{{#each commitGroups}}
+
+{{#if title}}
+### {{title}}
+
+{{/if}}
+{{#each commits}}
+{{> commit root=@root}}
+{{/each}}
+
+{{/each}}
+
+{{> footer}}
+`,
+    footerPartial: `
+{{#if contributors~}}
+### ❤️ Thank You
+
+{{#each contributors}}
+- {{name}} {{username}} {{#if firstTime}}(🎉 First-time contributor!){{/if}}
+{{/each}}
+{{/if}}
+`,
   };
 };
 
@@ -108,5 +151,23 @@ module.exports = {
     { name: 'beta', prerelease: true },
     { name: 'alpha', prerelease: true },
   ],
+  preset: 'conventionalcommits',
+  presetConfig: {
+    types: [
+      { type: 'feat', section: '🚀 Features' },
+      { type: 'fix', section: '🩹 Fixes' },
+      { type: 'perf', section: '🔥 Performance' },
+      { type: 'refactor', section: '💅 Refactors', hidden: true },
+      { type: 'docs', section: '📖 Documentation', hidden: true },
+      { type: 'build', section: '📦 Build', hidden: true },
+      { type: 'types', section: '🌊 Types', hidden: true },
+      { type: 'chore', section: '🏡 Chore', hidden: true },
+      { type: 'examples', section: '🏀 Examples', hidden: true },
+      { type: 'test', section: '✅ Tests', hidden: true },
+      { type: 'style', section: '🎨 Styles', hidden: true },
+      { type: 'ci', section: '🤖 CI', hidden: true },
+      { type: 'revert', section: '⏪ Revert', hidden: true },
+    ],
+  },
   writerOpts: writerOpts(),
 };
