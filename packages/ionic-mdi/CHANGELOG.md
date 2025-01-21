@@ -1,3 +1,16 @@
+## [1.0.2-alpha.1](https://github.com/robsonos/npm-packages/compare/ionic-mdi@v1.0.1...ionic-mdi@v1.0.2-alpha.1) (2025-01-21)
+
+
+### 🩹 Fixes
+
+* **ionic-mdi:** fix coverage badge [skip ci] ([b60e42b](https://github.com/robsonos/npm-packages/commit/b60e42b5a3a086e3471389f15060d87dd6baccb0))
+
+
+
+### ❤️ Thank You
+
+- Robson Oliveira dos Santos @robsonos
+
 ## [1.0.1](https://github.com/robsonos/npm-packages/compare/ionic-mdi@v1.0.0...ionic-mdi@v1.0.1) (2025-01-20)
 
 
