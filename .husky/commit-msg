@@ -1,4 +1,31 @@
+#!/bin/sh
+
 # Skip hook on CI environments
 [ -n "$CI" ] && exit 0
 
+# Run commit lint
 npx --no -- commitlint --edit ${1}
+
+# Read the commit message
+commit_msg_file="$1"
+commit_msg=$(cat "$commit_msg_file")
+
+# Regular expressions for valid skip/only syntax
+valid_skip_regex="\[skip (all|(?!(ci))([[:alnum:]_, -]+))\]"
+valid_only_regex="\[only ([[:alnum:]_, -]+)\]"
+
+# Check for incomplete or invalid skip/only tags
+if echo "$commit_msg" | grep -qE "\[skip \]" || echo "$commit_msg" | grep -qE "\[only \]"; then
+    echo "Invalid commit message: Detected incomplete [skip] or [only] tag."
+    return 1
+fi
+
+# Check if commit message contains at least one valid skip/only tag
+if ! echo "$commit_msg" | grep -Pq "$valid_skip_regex" && ! echo "$commit_msg" | grep -Pq "$valid_only_regex"; then
+    echo "Invalid commit message: Every commit must include at least one valid [skip all], [skip <library>], or [only <library>] tag."
+    return 1
+fi
+
+# If the message passes validation
+echo "Commit message validation passed."
+exit 0
