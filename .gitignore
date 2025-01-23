@@ -44,4 +44,9 @@ Thumbs.db
 test-output
 
 # act
-.act.*
+# .act.*
+# .gitignore can't have *s. See: https://github.com/nrwl/nx/issues/6821
+.act.env
+.act.variables
+.act.secrets
+.act.input

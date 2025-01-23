@@ -44,7 +44,7 @@
 
   // Code spell checker settings
   "cSpell.language": "en,en-AU",
-  "cSpell.words": ["Oliveira", "Scrollback", "SPIE"],
+  "cSpell.words": ["Oliveira"],
 
   // Commitlint settings
   "commitlint.preferBundledLibraries": true
