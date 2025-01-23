@@ -7,6 +7,8 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/exec": "^1.1.1",
     "@material-design-icons/svg": "^0.14.13",
     "material-design-icons-svg": "^3.3.1",
     "patch-package": "^8.0.0"

@@ -1,0 +1,33 @@
+{
+  "name": "nx-cloud-skipper-action",
+  "version": "1.0.0",
+  "keywords": [
+    "nx",
+    "nx-cloud",
+    "github-action"
+  ],
+  "description": "Run npx nx commands with fallback to --no-cloud if Nx Cloud credits are exhausted",
+  "author": {
+    "name": "Robson Oliveira",
+    "email": "robsonos@outlook.com"
+  },
+  "homepage": "https://github.com/robsonos/npm-packages/tree/main/packages/nx-cloud-skipper-action#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robsonos/npm-packages",
+    "directory": "packages/nx-cloud-skipper-action"
+  },
+  "bugs": {
+    "url": "https://github.com/robsonos/npm-packages"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^6.0.0"
+  }
+}
