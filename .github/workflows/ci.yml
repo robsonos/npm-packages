@@ -40,6 +40,6 @@ jobs:
         uses: nrwl/nx-set-shas@v4
 
       - name: Run CI on affected projects
-        uses: ./.github/actions/nx-cloud-skipper-action
+        uses: robsonos/nx-cloud-skipper-action@v1
         with:
-          command: 'affected -t lint test build'
+          command: affected -t lint test build
