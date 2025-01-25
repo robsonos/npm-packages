@@ -1,0 +1,50 @@
+{
+  "name": "myriota-updater-cli",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/myriota-updater-cli/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/myriota-updater-cli",
+        "main": "packages/myriota-updater-cli/src/index.ts",
+        "tsConfig": "packages/myriota-updater-cli/tsconfig.lib.json",
+        "format": ["cjs"],
+        "declarationRootDir": "packages/myriota-updater-cli/src",
+        "assets": [
+          "packages/myriota-updater-cli/package.json",
+          "packages/myriota-updater-cli/docs/**",
+          "packages/myriota-updater-cli/LICENSE",
+          "packages/myriota-updater-cli/*.md"
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/myriota-updater-cli/jest.config.ts"
+      }
+    },
+    "coverage-badge": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "coverage-badges-cli --source {projectRoot}/test-output/jest/coverage/coverage-summary.json --output {projectRoot}/docs/coverage/badge.svg --style flat"
+      }
+    },
+    "semantic-release": {
+      "executor": "@theunderscorer/nx-semantic-release:semantic-release",
+      "dependsOn": ["myriota-updater-cli:coverage-badge"],
+      "options": {
+        "gitAssets": ["{projectRoot}/docs/coverage/badge.svg"]
+      }
+    }
+  }
+}
