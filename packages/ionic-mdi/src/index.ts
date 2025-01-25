@@ -141,10 +141,22 @@ export class IconBuilder {
         join(distDirectory, 'README.md')
       );
 
+      // Add changelog file
+      await fs.copy(
+        join(rootDirectory, '..', 'CHANGELOG.md'),
+        join(distDirectory, 'CHANGELOG.md')
+      );
+
       // Add license file
       await fs.copy(
         join(rootDirectory, '..', 'LICENSE'),
         join(distDirectory, 'LICENSE')
+      );
+
+      // Add license docs
+      await fs.copy(
+        join(rootDirectory, '..', 'docs'),
+        join(distDirectory, 'docs')
       );
 
       await IconBuilder.createPackageJson(distDirectory, packageJsonFilePath);

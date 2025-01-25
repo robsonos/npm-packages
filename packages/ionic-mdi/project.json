@@ -18,7 +18,7 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/packages/ionic-mdi"],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "packages/ionic-mdi/jest.config.ts"
       }
@@ -33,9 +33,7 @@
       "executor": "@theunderscorer/nx-semantic-release:semantic-release",
       "dependsOn": ["ionic-mdi:coverage-badge"],
       "options": {
-        "gitAssets": ["{projectRoot}/docs/coverage/badge.svg"],
-        "buildTarget": "ionic-mdi:build",
-        "outputPath": "dist/packages/ionic-mdi"
+        "gitAssets": ["{projectRoot}/docs/coverage/badge.svg"]
       }
     }
   }

@@ -24,7 +24,7 @@
   "homepage": "https://github.com/robsonos/npm-packages/tree/main/packages/ionic-mdi#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/robsonos/npm-packages",
+    "url": "git+https://github.com/robsonos/npm-packages.git",
     "directory": "packages/ionic-mdi"
   },
   "bugs": {

@@ -144,6 +144,8 @@ const writerOpts = () => {
 module.exports = {
   repositoryUrl: 'https://github.com/robsonos/npm-packages',
   tagFormat: '${PROJECT_NAME}@v${version}',
+  buildTarget: '${PROJECT_NAME}:build',
+  outputPath: 'dist/packages/${PROJECT_NAME}',
   branches: [
     '+([0-9])?(.{+([0-9]),x}).x',
     'main',
