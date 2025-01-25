@@ -10,21 +10,21 @@
     style="color: inherit; text-decoration: none;">
     <img
       alt="GitHub Workflow Status (with event)"
-      src="https://img.shields.io/github/actions/workflow/status/robsonos/npm-packages/ci.yml">
+      src="https://img.shields.io/github/actions/workflow/status/robsonos/npm-packages/ci.yml?style=flat-square">
   </a>
   <a
     href="LICENSE"
     style="color: inherit; text-decoration: none;">
     <img
       alt="GitHub License"
-      src="https://img.shields.io/github/license/robsonos/npm-packages">
+      src="https://img.shields.io/github/license/robsonos/npm-packages?style=flat-square">
   </a>
   <a
     href="#contributors"
     style="color: inherit; text-decoration: none;">
     <img
         alt="GitHub contributors from allcontributors.org"
-        src="https://img.shields.io/github/all-contributors/robsonos/npm-packages">
+        src="https://img.shields.io/github/all-contributors/robsonos/npm-packages?style=flat-square">
   </a>
 </p>
 
