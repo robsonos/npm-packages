@@ -1,3 +1,16 @@
+## [1.0.2-alpha.2](https://github.com/robsonos/npm-packages/compare/ionic-mdi@v1.0.2-alpha.1...ionic-mdi@v1.0.2-alpha.2) (2025-01-27)
+
+
+### 🩹 Fixes
+
+* additional doc files to npm release ([42d5621](https://github.com/robsonos/npm-packages/commit/42d56217d98fedd1b9067ecb02fda317dda14959))
+
+
+
+### ❤️ Thank You
+
+- Robson Oliveira dos Santos @robsonos
+
 ## [1.0.2-beta.1](https://github.com/robsonos/npm-packages/compare/ionic-mdi@v1.0.1...ionic-mdi@v1.0.2-beta.1) (2025-01-23)
 
 
