@@ -5,6 +5,9 @@
   "references": [
     {
       "path": "./packages/ionic-mdi"
+    },
+    {
+      "path": "./packages/myriota-cli"
     }
   ]
 }

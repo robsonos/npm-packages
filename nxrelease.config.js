@@ -146,6 +146,7 @@ module.exports = {
   tagFormat: '${PROJECT_NAME}@v${version}',
   buildTarget: '${PROJECT_NAME}:build',
   outputPath: 'dist/packages/${PROJECT_NAME}',
+  gitAssets: ['${PROJECT_DIR}/docs/coverage/badge.svg'],
   branches: [
     '+([0-9])?(.{+([0-9]),x}).x',
     'main',

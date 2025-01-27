@@ -6,23 +6,44 @@
 # Run commit lint
 npx --no -- commitlint --edit ${1}
 
-# Read the commit message
+# Function to fetch valid project names from ./packages
+get_valid_projects() {
+    if [ -d "./packages" ]; then
+        # Extract directory names under ./packages
+        ls ./packages | grep -v '^\.' | tr '\n' ',' | sed 's/,$//'
+    else
+        echo ""
+    fi
+}
+
 commit_msg_file="$1"
 commit_msg=$(cat "$commit_msg_file")
 
+valid_projects=$(get_valid_projects)
+
+if [[ -z "$valid_projects" ]]; then
+    echo "No projects found in ./packages. Validation skipped."
+    return 0
+fi
+
+# Create regex from valid projects
+project_regex="($(echo "$valid_projects" | sed 's/,/|/g'))"
+
 # Regular expressions for valid skip/only syntax
-valid_skip_regex="\[skip (all|(?!(ci))([[:alnum:]_, -]+))\]"
-valid_only_regex="\[only ([[:alnum:]_, -]+)\]"
+valid_skip_regex="\[skip all\]|\[skip $project_regex(, $project_regex)*\]"
+valid_only_regex="\[only $project_regex(, $project_regex)*\]"
 
 # Check for incomplete or invalid skip/only tags
-if echo "$commit_msg" | grep -qE "\[skip \]" || echo "$commit_msg" | grep -qE "\[only \]"; then
-    echo "Invalid commit message: Detected incomplete [skip] or [only] tag."
+if ! echo "$commit_msg" | grep -Pq "$valid_skip_regex" && ! echo "$commit_msg" | grep -Pq "$valid_only_regex"; then
+    echo "Invalid commit message: ${commit_msg}"
+    echo "Commit body must reference projects from ./packages with [skip <package>], [only <package>], or [skip all] tags."
     return 1
 fi
 
 # Check if commit message contains at least one valid skip/only tag
 if ! echo "$commit_msg" | grep -Pq "$valid_skip_regex" && ! echo "$commit_msg" | grep -Pq "$valid_only_regex"; then
-    echo "Invalid commit message: Every commit must include at least one valid [skip all], [skip <library>], or [only <library>] tag."
+    echo "Invalid commit message: ${commit_msg}"
+    echo "Commit body must reference projects from ./packages with [skip <package>], [only <package>], or [skip all] tags."
     return 1
 fi
 
